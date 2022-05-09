@@ -6,11 +6,12 @@ import pygame
 
 import math
 import pygame
+from objects import *
 
 pygame.init()
 window = pygame.display.set_mode((1200, 800))
-canon_shoot = pygame.transform.smoothscale(pygame.image.load("cannon.png").convert_alpha(), (150, 67))
-canon_stand_image = pygame.transform.smoothscale(pygame.image.load("cannon2.png").convert_alpha(),(86,68))
+canon_shoot = pygame.transform.smoothscale(pygame.image.load("cannon.png").convert_alpha(), (130, 47))
+canon_stand_image = pygame.transform.smoothscale(pygame.image.load("cannon2.png").convert_alpha(),(66,48))
 
 background_sky = pygame.transform.smoothscale(pygame.image.load("v1015-101a.jpg").convert_alpha(),(1200,670))
 background_grass = pygame.transform.smoothscale(pygame.image.load("ground.png").convert_alpha(),(64,64))
@@ -23,33 +24,14 @@ background_ground = pygame.transform.smoothscale(pygame.image.load("ground_2.png
 correction_angle = 0
 
 
-class Ball(pygame.sprite.Sprite):
-    def __init__(self,width,height,x,y,color):
-        super().__init__()
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
-        self.rect = self.image.get_rect()
-        self.rect.center = [x,y]
 
 
-ball = Ball(30,30,100,100,(0,0,255))
 
-ball_group = pygame.sprite.Group()
-ball_group.add(ball) #Lists ?
 
-class Bullet(object):
-    def __init__(self,x,y,radius,color,facing):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.color = color
-        self.facing = facing
-        self.vel = 8 * facing
+bullets = []
+enemies = []
 
-    def draw(self,win):
-        pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
-
-bullets_shoot = []
+sq = Square((0,255,0),200,200,100,100, 10) #Bullets
 
 run = True
 while run:
@@ -58,9 +40,19 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.MOUSEBUTTONUP:
-            if len(bullets_shoot) < 5:
-                bullets_shoot.append(Bullet(590, 610, 10, (0, 0, 0), 1))
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            # print(x,y)
+            b = Bullet((255,0,0), sq.rect.centerx, sq.rect.centery, 20, 20, 20, x, y)
+            bullets.append(b)
+
+        for b in bullets:
+            b.move()
+        for e in enemies:
+            e.move()
+
+
+
 
     player_rect = canon_shoot.get_rect(center=(590,610))
     canon_stand = canon_stand_image.get_rect()
@@ -68,6 +60,7 @@ while run:
 
     if my>600: #Half of the window size
         my=600
+
     dx, dy = mx - player_rect.centerx, my - player_rect.centery
     angle = math.degrees(math.atan2(-dy, dx)) - correction_angle
     canon = pygame.transform.rotate(canon_shoot, angle)
@@ -84,19 +77,15 @@ while run:
 
     window.blit(canon, rot_image_rect)
     window.blit(canon_stand_image,(550,600))
-    ball_group.draw(window)
 
-    for bullet in bullets_shoot:
-        if bullet.x < 500 and bullet.x > 0:
-            bullet.x += bullet.vel  # Moves the bullet by its vel
-        else:
-            bullets_shoot.pop(bullets_shoot.index(bullet))  # This will remove the bullet if it is off the screen
+    for b in bullets:
+        b.draw(window)
+    for e in enemies:
+        e.draw(window)
 
-    for bullet in bullets_shoot:
-        bullet.draw(window)
-
-
+    
     pygame.display.flip()
+
 
 
 
