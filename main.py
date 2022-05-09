@@ -46,10 +46,10 @@ while run:
             b = Bullet((255,0,0), sq.rect.centerx, sq.rect.centery, 20, 20, 20, x, y)
             bullets.append(b)
 
-        for b in bullets:
-            b.move()
-        for e in enemies:
-            e.move()
+    for b in bullets:
+        b.move()
+    for e in enemies:
+        e.move()
 
 
 
@@ -83,7 +83,7 @@ while run:
     for e in enemies:
         e.draw(window)
 
-    
+
     pygame.display.flip()
 
 
