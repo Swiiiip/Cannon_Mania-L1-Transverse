@@ -47,17 +47,19 @@ while run:
     pygame.mouse.set_visible(True)
 
 
-    player_rect = canon_shoot.get_rect(center=(585,620))
+    player_rect = canon_shoot.get_rect(center=(70,700))
     canon_stand = canon_stand_image.get_rect()
     mx, my = pygame.mouse.get_pos()
 
-    if my>600: #Half of the window size
-        my=600
+    if my > 620: #Half of the window size
+        my=620
+    if mx < 200:
+        mx = 200
 
     dx, dy = mx - player_rect.centerx, my - player_rect.centery
     angle = math.degrees(math.atan2(-dy, dx)) - correction_angle
     canon = pygame.transform.rotate(canon_shoot, angle)
-    rot_image_rect = canon.get_rect(center=(585,620))
+    rot_image_rect = canon.get_rect(center=(215, 625))
 
 
 
@@ -73,9 +75,11 @@ while run:
         for x in range(0, 1200, 63):
             window.blit(background_ground, (x, 660 + y))
 
-    window.blit(canon_stand_image,(550,615))
-
     window.blit(canon, rot_image_rect)
+    window.blit(canon_stand_image,(165,615))
+
+
+
     for b in bullets:
         (b[0]).draw(window,b[1])
 
@@ -91,7 +95,7 @@ while run:
             x, y = pygame.mouse.get_pos()
             if (not(y>600)) and len(bullets)<3:
                 color = (randint(0,255),randint(0,255),randint(0,255))
-                b = Bullet((0,0,0), 570, 620, 20, 20, 20, x, y)
+                b = Bullet((0,0,0), 200, 620, 20, 20, 20, x, y)
                 b.draw(window,color)
                 bullets.append((b,color))
                 #pygame.mixer.sound.play()
@@ -100,12 +104,53 @@ while run:
         b[0].move()
         if b[0].x>1200 or b[0].x<0 or b[0].y>800 or b[0].y<0:
             bullets.remove(b)
-    window.blit(canon, rot_image_rect)
+
 
     pygame.display.flip()
 
 
 
+
+'''
+
+obstacle_spawn_cooldown = False
+obstacle_spawn_cooldown_counter = 0
+spawn_probability = SPAWN_PROBABILITY_PER_SECOND / FPS
+
+for obstacle in game.obstacles:
+    obstacle.update()
+
+for projectile in game.projectiles:
+    projectile.update()
+    for obstacle in game.obstacles:
+        if isinstance(obstacle, EnnemyFalling) and projectile.rect.colliderect(obstacle.rect):
+            game.obstacles.remove(obstacle)
+            game.projectiles.remove(projectile)
+
+if not obstacle_spawn_cooldown:
+    if random.random() < spawn_probability:
+        obstacle_spawn_cooldown = True
+        game.obstacles.append(EnnemyFalling(ARROW, game))
+        game.obstacles.append(EnnemyFalling(ARROW, game))
+        game.obstacles.append(EnnemyFalling(ARROW, game))
+        game.obstacles.append(EnnemyFalling(ARROW, game))
+        if random.random() < 0.5:
+            game.obstacles.append(Cat(game))
+        else:
+            game.obstacles.append(Rock(game))
+
+# Spawn cooldown
+else:
+    obstacle_spawn_cooldown_counter += clock.get_time()
+    if obstacle_spawn_cooldown_counter >= SPAWN_COOLDOWN:
+        obstacle_spawn_cooldown = False
+        obstacle_spawn_cooldown_counter = 0
+
+ # Apply obstacles
+    for obstacle in game.obstacles:
+        screen.blit(obstacle.image, obstacle.rect)
+
+'''
 
 pygame.quit()
 exit()

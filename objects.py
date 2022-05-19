@@ -41,3 +41,64 @@ class Bullet(Square):
 
     def draw(self,win,color):
         pygame.draw.circle(win, color , (self.x,self.y) ,20)
+
+
+
+'''
+
+# class for all the obstacles
+class Ennemy(pygame.sprite.Sprite):
+    def __init__(self, image, game):
+        super().__init__()
+
+        self.image = image
+        self.game = game
+
+        # Rectangle coordinates of the image
+        self.rect = self.image.get_rect()
+
+        # The x coordinates of the obstacle to the screen width
+        self.rect.x = SCREEN_SIZE[0]
+        self.rect.y = START_Y - self.image.get_height()
+
+    def update(self):
+        # Move the obstacle across the screen
+        self.rect.x -= self.game.speed
+
+        # Remove the obstacle soon as the screen disappear
+        if self.rect.x < -self.rect.width:
+            self.game.obstacles.pop(self.game.obstacles.index(self))
+
+
+class EnnemyFalling(Ennemy):
+    def __init__(self, image, game):
+        super().__init__(image, game)
+        self.rect.x = random.randint(0, SCREEN_SIZE[0])
+        self.rect.y = -self.rect.height
+
+        self.volacity_x = random.randint(-10, 10)
+        self.volacity_y = 0
+
+    def update(self):
+        # Move the obstacle across the screen
+        self.rect.x -= self.game.speed + self.volacity_x
+        self.rect.y += self.volacity_y
+        self.volacity_y += GRAVITY
+
+        # Remove the obstacle soon as the screen disappear
+        if self.rect.x < -self.rect.width or self.rect.y > SCREEN_SIZE[1]:
+            self.game.obstacles.pop(self.game.obstacles.index(self))
+
+
+class Cat(Ennemy):
+    N_CATS = 3
+    CATS = [
+        pygame.transform.scale(
+            sprite, (sprite.get_width() * 2, sprite.get_height() * 2)
+        )
+        for sprite in [pygame.image.load(f"assets/Cat{i}.png") for i in range(N_CATS)]
+    ]
+
+    def __init__(self, obstacles):
+        super().__init__(Cat.CATS[random.randrange(Cat.N_CATS)], obstacles)
+'''
