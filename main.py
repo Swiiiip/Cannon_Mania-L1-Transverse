@@ -5,7 +5,6 @@ import pygame
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
 import math
-import pygame
 from objects import Enemy, Bullet
 import random
 
@@ -35,7 +34,7 @@ enemies = []
 
 clock = pygame.time.Clock()
 
-ENEMY_SPAWN_PROBABILITY_PER_SECOND = 0.5
+ENEMY_SPAWN_PROBABILITY_PER_SECOND = 0.1
 SPAWN_COOLDOWN = 200
 
 FPS = 60
@@ -129,28 +128,30 @@ while run:
             run = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
-            if y <= 600 and len(bullets) < 1:
+            if y <= 650 and len(bullets) < 1:
                 color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-                b = Bullet((0,0,0), 200, 620, 20, 20, 20, x, y)
+                b = Bullet(color, 200, 620, 20, 20, 20, x, y)
                 #b.draw(window,color)
-                bullets.append((b,color))
+                bullets.append(b)
                 #pygame.mixer.sound.play()
+                
 
     for b in bullets:
-        b[0].move()
-
+        b.move()
+        if (b.y > 650):
+            bullets.remove(b)
         found = False
         for enemy in enemies:
-            if enemy.collide_with(b[0]):
+            if enemy.collide_with(b):
                 bullets.remove(b)
                 enemies.remove(enemy)
                 found = True
 
 
-        if not found and (b[0].x > window.get_width() or b[0].x < 0 or b[0].y > window.get_height()):
+        if not found and (b.x > window.get_width() or b.x < 0 or b.y > window.get_height()):
             bullets.remove(b)
 
-        b[0].draw(window,b[1])
+        b.draw(window,b.color)
 
 
     pygame.display.flip()
