@@ -18,6 +18,8 @@ window = pygame.display.set_mode((1200, 800))
 canon_shoot = pygame.transform.smoothscale(pygame.image.load("cannon.png").convert_alpha(), (130, 47))
 canon_stand_image = pygame.transform.smoothscale(pygame.image.load("cannon2.png").convert_alpha(),(66,48))
 canon_ball = pygame.transform.smoothscale(pygame.image.load("canon_ball_img.png").convert_alpha(),(35,35))
+tower = pygame.transform.smoothscale(pygame.image.load("Tower.png").convert_alpha(),(230,550))
+
 
 background_sky = pygame.transform.smoothscale(pygame.image.load("sky.jpg").convert_alpha(),(1200,670))
 background_grass = pygame.transform.smoothscale(pygame.image.load("ground.png").convert_alpha(),(64,64))
@@ -78,9 +80,11 @@ while run:
     angle = math.degrees(math.atan2(-dy, dx)) - correction_angle
     canon = pygame.transform.rotate(canon_shoot, angle)
     rot_image_rect = canon.get_rect(center=(215, 625))
-
+    tower_rect = tower.get_rect(center = (-10,300))
+    
     window.blit(canon, rot_image_rect)
     window.blit(canon_stand_image,(180,615))
+    window.blit(tower, (-115,113))
 
 
     # display life
@@ -116,7 +120,7 @@ while run:
     
     for enemy in enemies:
         enemy.move()
-        if (rot_image_rect.colliderect(enemy.rect) or enemy.rect.x <= -enemy.rect.width):
+        if (rot_image_rect.colliderect(enemy.rect) or tower_rect.colliderect(enemy.rect)):
             enemies.remove(enemy)
             life -= 10
         
