@@ -6,7 +6,6 @@ import pygame
 
 #imports
 import math
-import pygame
 from objects import Enemy, Bullet
 import random
 
@@ -33,6 +32,8 @@ background_sky = pygame.transform.smoothscale(pygame.image.load("sky.jpg").conve
 background_grass = pygame.transform.smoothscale(pygame.image.load("ground.png").convert_alpha(),(64,64))
 
 background_ground = pygame.transform.smoothscale(pygame.image.load("ground_2.png").convert_alpha(),(63,44))
+
+tower = pygame.transform.smoothscale(pygame.image.load("Tower.png").convert_alpha(),(230,550))
 
 start_button = pygame.transform.smoothscale(pygame.image.load("start_button.png").convert_alpha(), (200, 114))
 
@@ -96,7 +97,7 @@ def game_function():
 
     #Enemies spawning probability
     ENEMY_SPAWN_PROBABILITY_PER_SECOND = 0.5
-    SPAWN_COOLDOWN = 200
+    SPAWN_COOLDOWN = 20
     enemy_spawn_cooldown = False
     enemy_spawn_cooldown_counter = 0
     enemy_spawn_probability = ENEMY_SPAWN_PROBABILITY_PER_SECOND / FPS
@@ -144,8 +145,11 @@ def game_function():
         canon = pygame.transform.rotate(canon_shoot, angle)
         rot_image_rect = canon.get_rect(center=(215, 625))
 
+        tower_rect = tower.get_rect(center = (-10,300))
+
+        window.blit(tower, (-115,113))
         window.blit(canon, rot_image_rect)
-        window.blit(canon_stand_image,(165,615))
+        window.blit(canon_stand_image,(180,615))
 
 
 
@@ -174,7 +178,8 @@ def game_function():
 
         for enemy in enemies:
             enemy.move()
-            if (rot_image_rect.colliderect(enemy.rect) or enemy.rect.x <= -enemy.rect.width):
+            if (rot_image_rect.colliderect(enemy.rect) or tower_rect.colliderect(enemy.rect)
+):
                 enemies.remove(enemy)
                 life -= 10
 
@@ -195,28 +200,31 @@ def game_function():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                if y <= 600 and len(bullets) < 1:
+                if y <= 600 and x > 180 and len(bullets) < 1:
                     color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-                    b = Bullet((0,0,0), 200, 620, 20, 20, 20, x, y)
+                    b = Bullet(200, 620, 20, 20, 20, x, y)
                     #b.draw(window,color)
-                    bullets.append((b,color))
+                    bullets.append(b)
                     #pygame.mixer.sound.play()
 
         for b in bullets:
-            b[0].move()
+            b.move()
+
+            if (b.y > 650):
+              bullets.remove(b)
 
             found = False
             for enemy in enemies:
-                if enemy.collide_with(b[0]):
+                if enemy.collide_with(b):
                     bullets.remove(b)
                     enemies.remove(enemy)
                     found = True
 
 
-            if not found and (b[0].x > window.get_width() or b[0].x < 0 or b[0].y > window.get_height()):
+            if not found and (b.x > window.get_width() or b.x < 0):
                 bullets.remove(b)
 
-            b[0].draw(window,b[1])
+            b.draw(window,color)
 
 
         pygame.display.flip()
