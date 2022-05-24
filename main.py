@@ -38,6 +38,10 @@ exit_button = pygame.transform.smoothscale(pygame.image.load("Exit_button.png").
 
 castle_start = pygame.transform.smoothscale(pygame.image.load("castle_start.png").convert_alpha(), (700, 454))
 
+canon_ball = pygame.transform.smoothscale(pygame.image.load("canon_ball_img.png").convert_alpha(),(35,35))
+tower = pygame.transform.smoothscale(pygame.image.load("Tower.png").convert_alpha(),(230,550))
+
+
 #For the collision of enemies with the canon 
 canon_stand = canon_stand_image.get_rect()
 player_rect = canon_shoot.get_rect(center=(215, 625))
@@ -150,6 +154,10 @@ def game_function():
         canon = pygame.transform.rotate(canon_shoot, angle)
         rot_image_rect = canon.get_rect(center=(215, 625))
 
+        tower_rect = tower.get_rect(center = (-10,300))
+        window.blit(tower, (-115,113))
+
+
         window.blit(canon, rot_image_rect)
         window.blit(canon_stand_image,(165,615))
 
@@ -211,6 +219,8 @@ def game_function():
 
         for b in bullets:
             b[0].move()
+            if (b.y > 650):
+                bullets.remove(b)
 
             found = False
             for enemy in enemies:
