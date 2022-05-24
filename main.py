@@ -35,15 +35,25 @@ background_ground = pygame.transform.smoothscale(pygame.image.load("ground_2.png
 
 tower = pygame.transform.smoothscale(pygame.image.load("Tower.png").convert_alpha(),(230,550))
 
+start_button_before_hover = pygame.transform.smoothscale(pygame.image.load("start_button_before_hover.png").convert_alpha(), (200, 114))
+
 start_button = pygame.transform.smoothscale(pygame.image.load("start_button.png").convert_alpha(), (200, 114))
 
 exit_button = pygame.transform.smoothscale(pygame.image.load("Exit_button.png").convert_alpha(), (200, 85) )
 
+exit_button_before_hover = pygame.transform.smoothscale(pygame.image.load("Exit_button_before_hover.png").convert_alpha(), (200, 85) )
+
 castle_start = pygame.transform.smoothscale(pygame.image.load("castle_start.png").convert_alpha(), (700, 454))
+
+
+
+
+
 
 #For the collision of enemies with the canon
 canon_stand = canon_stand_image.get_rect()
 player_rect = canon_shoot.get_rect(center=(215, 625))
+
 
 #   0 - image is looking to the right
 #  90 - image is looking up
@@ -71,16 +81,29 @@ def start_menu():
             for x in range(0, 1200, 63):
                 window.blit(background_ground, (x, 660 + y))
 
-        window.blit(start_button, (window_width/2 - 110, 200))
-        window.blit(exit_button, (window_width/2- 110, 300))
+        window.blit(start_button_before_hover, (window_width/2 - 110, 200))
+        window.blit(exit_button_before_hover, (window_width/2- 110, 300))
         window.blit(castle_start, (window_width/2 - 350, 210))
 
+
+        mx, my = pygame.mouse.get_pos() #Positions of the mouse
+
+        if(mx > window_width/2 - 95 and mx < window_width/2 - 135 + 200 and my > 210 and my < 290):
+            window.blit(start_button, (window_width/2 - 110, 200))
+
+        if(mx > window_width/2 - 90 and mx < window_width/2 - 138 + 200 and my > 310 and my < 370):
+            window.blit(exit_button, (window_width/2- 110, 300))
+            
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                run = False
+                if(mx > window_width/2 - 95 and mx < window_width/2 - 135 + 200 and my > 210 and my < 290): # borders of the start button
+                    game_function()
+                if(mx > window_width/2 - 90 and mx < window_width/2 - 138 + 200 and my > 310 and my < 370):
+                    pygame.quit()
+
 
         pygame.display.flip()
 
@@ -238,6 +261,6 @@ def game_function():
     exit()
 
 start_menu()
-game_function()
+#game_function()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
