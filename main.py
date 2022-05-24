@@ -17,6 +17,7 @@ pygame.mixer.init()
 window = pygame.display.set_mode((1200, 800))
 canon_shoot = pygame.transform.smoothscale(pygame.image.load("cannon.png").convert_alpha(), (130, 47))
 canon_stand_image = pygame.transform.smoothscale(pygame.image.load("cannon2.png").convert_alpha(),(66,48))
+canon_ball = pygame.transform.smoothscale(pygame.image.load("canon_ball_img.png").convert_alpha(),(35,35))
 
 background_sky = pygame.transform.smoothscale(pygame.image.load("sky.jpg").convert_alpha(),(1200,670))
 background_grass = pygame.transform.smoothscale(pygame.image.load("ground.png").convert_alpha(),(64,64))
@@ -34,8 +35,8 @@ enemies = []
 
 clock = pygame.time.Clock()
 
-ENEMY_SPAWN_PROBABILITY_PER_SECOND = 0.1
-SPAWN_COOLDOWN = 200
+ENEMY_SPAWN_PROBABILITY_PER_SECOND = 0.5
+SPAWN_COOLDOWN = 20
 
 FPS = 60
 
@@ -79,7 +80,8 @@ while run:
     rot_image_rect = canon.get_rect(center=(215, 625))
 
     window.blit(canon, rot_image_rect)
-    window.blit(canon_stand_image,(165,615))
+    window.blit(canon_stand_image,(180,615))
+
 
     # display life
     pygame.draw.rect(window, (100, 0, 0), (10, 100, max_life, 10))
@@ -111,6 +113,7 @@ while run:
             enemy_spawn_cooldown = False
             enemy_spawn_cooldown_counter = 0
 
+    
     for enemy in enemies:
         enemy.move()
         if (rot_image_rect.colliderect(enemy.rect) or enemy.rect.x <= -enemy.rect.width):
@@ -128,11 +131,12 @@ while run:
             run = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
-            if y <= 650 and len(bullets) < 1:
+            if y <= 650 and x > 180 and len(bullets) < 1:
                 color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-                b = Bullet(color, 200, 620, 20, 20, 20, x, y)
+                b = Bullet(200, 620, 20, 20, 20, x, y)
                 #b.draw(window,color)
                 bullets.append(b)
+                
                 #pygame.mixer.sound.play()
                 
 
@@ -146,12 +150,13 @@ while run:
                 bullets.remove(b)
                 enemies.remove(enemy)
                 found = True
+                
 
-
-        if not found and (b.x > window.get_width() or b.x < 0 or b.y > window.get_height()):
+        if not found and (b.x > window.get_width() or b.x < 0):
             bullets.remove(b)
 
-        b.draw(window,b.color)
+        b.draw(window,color)
+    
 
 
     pygame.display.flip()

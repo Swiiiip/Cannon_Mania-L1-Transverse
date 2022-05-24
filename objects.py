@@ -2,6 +2,8 @@ import pygame
 import math
 from random import *
 
+
+
 class Enemy:
     def __init__(self, color, x, y, width, height, speed):
         self.rect = pygame.Rect(x, y, width, height)
@@ -22,7 +24,7 @@ class Enemy:
 GRAVITY = 0.3
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, color, x, y, width, height, speed, targetx,targety):
+    def __init__(self, x, y, width, height, speed, targetx,targety):
         super().__init__()
         
         self.rect = pygame.Rect(x, y, width, height)
@@ -32,6 +34,7 @@ class Bullet(pygame.sprite.Sprite):
         self.dy = math.sin(angle)*speed
         self.x = x
         self.y = y
+
 
 
     #Override
@@ -47,8 +50,11 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x = int(self.x)
         self.rect.y = int(self.y)
 
+        
+
     def draw(self,win,color):
         pygame.draw.circle(win, color , (self.x,self.y) ,20)
+        
 
 
 
