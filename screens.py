@@ -28,7 +28,7 @@ background_ground = pygame.transform.smoothscale(pygame.image.load("ground_2.png
 
 tower = pygame.transform.smoothscale(pygame.image.load("Tower.png").convert_alpha(),(230,550))
 
-health_bar = pygame.transform.smoothscale(pygame.image.load("health_bar.png").convert_alpha(),(140,40))
+health_bar = pygame.transform.smoothscale(pygame.image.load("health_bar.png").convert_alpha(),(200,39))
 
 start_button_before_hover = pygame.transform.smoothscale(pygame.image.load("start_button_before_hover.png").convert_alpha(), (200, 114))
 
@@ -49,11 +49,13 @@ castle_end = pygame.transform.smoothscale(pygame.image.load("Castle_end.png").co
 game_title = pygame.transform.smoothscale(pygame.image.load("game_title.png").convert_alpha(), (700, 67))
 
 #Initialize and load music and sounds
-background_music_start = pygame.mixer.music.load('Wii Music - No Copyright.mp3')
+background_music_start = pygame.mixer.Sound('Wii Music - No Copyright.mp3')
 
 canon_shot_sound = pygame.mixer.Sound('Cannon Sound Effect.mp3')
 
 mouse_click_sound = pygame.mixer.Sound('Mouse Click Sound Effect (No Copyright).mp3')
+
+score_sound = pygame.mixer.Sound('Score.mp3')
 
 #AUGH_sound = pygame.mixer.Sound('AUGHHHH sound effect tiktok snoring meme.mp3')
 
@@ -92,8 +94,9 @@ def display_background():
 def start_menu():
 
 
-    pygame.mixer.music.play(-1) #loop the music infinitely (Hence the -1 parameter)
+    #pygame.mixer.music.play(-1) #loop the music infinitely (Hence the -1 parameter)
 
+    background_music_start.play()
     run = True
     while run:
 
@@ -179,6 +182,8 @@ def End_menu():
 
 # Function for the game its self
 def game_function():
+    background_music_start.stop()
+
     #correction_angle = 0
 
     #initialize the objects
@@ -196,6 +201,12 @@ def game_function():
     #Life bar
     max_life = 100
     life = max_life
+
+    #Score text init
+    score = 0
+    score_font = pygame.font.SysFont(None,48)
+    display_score = score_font.render("Score : "+str(score),True,(0,0,0))
+
 
 
 
@@ -234,8 +245,11 @@ def game_function():
 
 
         # display life
-        pygame.draw.rect(window, (100, 0, 0), (47, 77, max_life, 14))
-        pygame.draw.rect(window, (255, 0, 0), (47, 77, life, 14))
+        pygame.draw.rect(window, (100, 0, 0), (62, 77, max_life+44, 14))
+        pygame.draw.rect(window, (255, 0, 0), (62, 77, life+44, 14))
+
+        # display score
+        window.blit(display_score, (1000, 55))
 
         if not enemy_spawn_cooldown:
             if random.random() < enemy_spawn_probability:
@@ -268,12 +282,6 @@ def game_function():
                 enemy.draw(window)
 
         if life <= 0:
-            '''window.fill((127, 174, 226))
-            game_over_text = pygame.font.SysFont(None, 80).render("You lose !", True, (255, 255, 255))
-            window.blit(game_over_text, (470, 150))
-            mouse = pygame.mouse.get_pos()
-            window.blit(game_over_text, (800 / 2 + 50, 1200 / 2))
-            #run=False'''
             End_menu()
 
 
@@ -283,6 +291,7 @@ def game_function():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if y <= 600 and x > 180 and len(bullets) < 1:
+                    canon_shot_sound.set_volume(0.3)
                     canon_shot_sound.play()
                     color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
                     b = Bullet(200, 620, 20, 20, 20, x, y)
@@ -292,15 +301,25 @@ def game_function():
 
         for b in bullets:
             b.move()
+            already_removed = 0
 
             if (b.y > 650):
               bullets.remove(b)
+              already_removed = 1
+            #Sometimes we have the ball colliding but also out the screen : there is an error
 
             found = False
             for enemy in enemies:
                 if enemy.collide_with(b):
-                    bullets.remove(b)
+                    if already_removed == 0:
+                        bullets.remove(b)
                     enemies.remove(enemy)
+                    score = score + 1
+                    if score%10==0:
+                        score_sound.set_volume(0.9)
+                        score_sound.play()
+                    display_score = score_font.render("Score : "+str(score), True, (0, 0, 0))
+                    enemy_spawn_probability = enemy_spawn_probability+0.0004
                     found = True
 
 
