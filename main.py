@@ -47,12 +47,17 @@ play_again_button = pygame.transform.smoothscale(pygame.image.load("play_again_b
 
 play_again_button_before_hover =  pygame.transform.smoothscale(pygame.image.load("play_again_button_before_hover.png").convert_alpha(), (200, 85) )
 
-
 castle_start = pygame.transform.smoothscale(pygame.image.load("castle_start.png").convert_alpha(), (700, 454))
 
 castle_end = pygame.transform.smoothscale(pygame.image.load("Castle_end.png").convert_alpha(), (700,454))
 
+background_music_start = pygame.mixer.music.load('Wii Music - No Copyright.mp3')
 
+canon_shot_sound = pygame.mixer.Sound('Cannon Sound Effect.mp3')
+
+mouse_click_sound = pygame.mixer.Sound('Mouse Click Sound Effect (No Copyright).mp3')
+
+#AUGH_sound = pygame.mixer.Sound('AUGHHHH sound effect tiktok snoring meme.mp3')
 
 
 
@@ -75,6 +80,7 @@ correction_angle = 0
 
 def start_menu():
 
+    pygame.mixer.music.play(-1)
     run = True
     while run:
         # Sky Background (Actually drawing it)
@@ -111,8 +117,11 @@ def start_menu():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if(mx > window_width/2 - 95 and mx < window_width/2 - 135 + 200 and my > 210 and my < 290): # borders of the start button
+                    mouse_click_sound.play()
                     game_function()
                 if(mx > window_width/2 - 90 and mx < window_width/2 - 138 + 200 and my > 310 and my < 370):
+                    mouse_click_sound.play()
+
                     pygame.quit()
 
 
@@ -168,8 +177,10 @@ def End_menu():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if(mx > window_width/2 + 150  and mx < window_width/2 + 350 and my > 100 and my < 185): # borders of the start button
+                    mouse_click_sound.play()
                     game_function()
                 if(mx > window_width/2 - 348 and mx < window_width/2 - 348 + 200 and my > 100 and my < 185):
+                    mouse_click_sound.play()
                     pygame.quit()
 
 
@@ -273,6 +284,7 @@ def game_function():
             enemy.move()
             if (rot_image_rect.colliderect(enemy.rect) or tower_rect.colliderect(enemy.rect)
 ):
+                #AUGH_sound.play()
                 enemies.remove(enemy)
                 life -= 10
 
@@ -295,6 +307,7 @@ def game_function():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if y <= 600 and x > 180 and len(bullets) < 1:
+                    canon_shot_sound.play()
                     color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
                     b = Bullet(200, 620, 20, 20, 20, x, y)
                     #b.draw(window,color)
