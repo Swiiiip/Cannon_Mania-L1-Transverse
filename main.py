@@ -35,6 +35,8 @@ background_ground = pygame.transform.smoothscale(pygame.image.load("ground_2.png
 
 tower = pygame.transform.smoothscale(pygame.image.load("Tower.png").convert_alpha(),(230,550))
 
+health_bar = pygame.transform.smoothscale(pygame.image.load("health_bar.png").convert_alpha(),(140,40))
+
 start_button_before_hover = pygame.transform.smoothscale(pygame.image.load("start_button_before_hover.png").convert_alpha(), (200, 114))
 
 start_button = pygame.transform.smoothscale(pygame.image.load("start_button.png").convert_alpha(), (200, 114))
@@ -254,12 +256,13 @@ def game_function():
         window.blit(tower, (-115,113))
         window.blit(canon, rot_image_rect)
         window.blit(canon_stand_image,(180,615))
+        window.blit(health_bar,(10,55))
 
 
 
         # display life
-        pygame.draw.rect(window, (100, 0, 0), (10, 100, max_life, 10))
-        pygame.draw.rect(window, (255, 0, 0), (10, 100, life, 10))
+        pygame.draw.rect(window, (100, 0, 0), (47, 77, max_life, 14))
+        pygame.draw.rect(window, (255, 0, 0), (47, 77, life, 14))
 
         if not enemy_spawn_cooldown:
             if random.random() < enemy_spawn_probability:
