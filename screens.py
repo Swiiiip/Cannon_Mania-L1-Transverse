@@ -50,12 +50,15 @@ game_title = pygame.transform.smoothscale(pygame.image.load("game_title.png").co
 
 #Initialize and load music and sounds
 background_music_start = pygame.mixer.Sound('Wii Music - No Copyright.mp3')
+background_music_start.set_volume(0.3)
 
 canon_shot_sound = pygame.mixer.Sound('Cannon Sound Effect.mp3')
 
 mouse_click_sound = pygame.mixer.Sound('Mouse Click Sound Effect (No Copyright).mp3')
 
 score_sound = pygame.mixer.Sound('Score.mp3')
+
+background_music_game = pygame.mixer.Sound("music.mp3")
 
 #AUGH_sound = pygame.mixer.Sound('AUGHHHH sound effect tiktok snoring meme.mp3')
 
@@ -139,6 +142,9 @@ def start_menu():
 
 # Function for the screen after losing
 def End_menu():
+    background_music_game.stop()
+    background_music_start.play()
+
 
 
     run = True
@@ -183,6 +189,8 @@ def End_menu():
 # Function for the game its self
 def game_function():
     background_music_start.stop()
+    background_music_game.play()
+    background_music_game.set_volume(1)
 
     #correction_angle = 0
 
@@ -291,7 +299,7 @@ def game_function():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 if y <= 600 and x > 180 and len(bullets) < 1:
-                    canon_shot_sound.set_volume(0.3)
+                    canon_shot_sound.set_volume(0.1)
                     canon_shot_sound.play()
                     color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
                     b = Bullet(200, 620, 20, 20, 20, x, y)
@@ -316,7 +324,7 @@ def game_function():
                     enemies.remove(enemy)
                     score = score + 1
                     if score%10==0:
-                        score_sound.set_volume(0.9)
+                        score_sound.set_volume(0.4)
                         score_sound.play()
                     display_score = score_font.render("Score : "+str(score), True, (0, 0, 0))
                     enemy_spawn_probability = enemy_spawn_probability+0.0004
