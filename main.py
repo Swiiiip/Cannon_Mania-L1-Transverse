@@ -43,7 +43,14 @@ exit_button = pygame.transform.smoothscale(pygame.image.load("Exit_button.png").
 
 exit_button_before_hover = pygame.transform.smoothscale(pygame.image.load("Exit_button_before_hover.png").convert_alpha(), (200, 85) )
 
+play_again_button = pygame.transform.smoothscale(pygame.image.load("play_again_button.png").convert_alpha(), (200, 85) )
+
+play_again_button_before_hover =  pygame.transform.smoothscale(pygame.image.load("play_again_button_before_hover.png").convert_alpha(), (200, 85) )
+
+
 castle_start = pygame.transform.smoothscale(pygame.image.load("castle_start.png").convert_alpha(), (700, 454))
+
+castle_end = pygame.transform.smoothscale(pygame.image.load("Castle_end.png").convert_alpha(), (700,454))
 
 
 
@@ -61,6 +68,9 @@ player_rect = canon_shoot.get_rect(center=(215, 625))
 # 270 - image is looking down
 
 correction_angle = 0
+
+
+
 
 
 def start_menu():
@@ -84,6 +94,7 @@ def start_menu():
         window.blit(start_button_before_hover, (window_width/2 - 110, 200))
         window.blit(exit_button_before_hover, (window_width/2- 110, 300))
         window.blit(castle_start, (window_width/2 - 350, 210))
+    
 
 
         mx, my = pygame.mouse.get_pos() #Positions of the mouse
@@ -106,6 +117,65 @@ def start_menu():
 
 
         pygame.display.flip()
+
+
+def End_menu():
+
+
+    run = True
+    while run:
+        pygame.mouse.set_visible(True)#Make the mouse invisible
+        # Sky Background (Actually drawing it)
+        window.fill((255, 255, 255))
+        window.blit(background_sky, (0, 0))
+
+
+        # Loop to draw the grass because the size of it is small, so we draw it multiple times on the same y, but changing the x
+        for x in range(0,1200,64):
+            window.blit(background_grass,(x,660))
+
+        # Loop to draw the ground because the size of it is small, so we draw it multiple times on tdifferent y's and x's
+        for y in range(64,800,43):
+            for x in range(0, 1200, 63):
+                window.blit(background_ground, (x, 660 + y))
+        '''
+        exit_button = pygame.transform.smoothscale(pygame.image.load("Exit_button.png").convert_alpha(), (200, 85) )
+
+        exit_button_before_hover = pygame.transform.smoothscale(pygame.image.load("Exit_button_before_hover.png").convert_alpha(), (200, 85) )
+
+        play_again_button = pygame.transform.smoothscale(pygame.image.load("play_again_button.png").convert_alpha(), (200, 85) )
+
+        play_again_button_before_hover =  pygame.transform.smoothscale(pygame.image.load("play_again_button_before_hover.png").convert_alpha(), (200, 85) )
+        '''
+
+        window.blit(play_again_button_before_hover, (window_width/2 + 150, 100))
+        window.blit(exit_button_before_hover, (window_width/2 - 348, 100))
+
+        window.blit(castle_end, (window_width/2 - 350, 210))
+
+
+        mx, my = pygame.mouse.get_pos() #Positions of the mouse
+
+        if(mx > window_width/2 + 150  and mx < window_width/2 + 350 and my > 100 and my < 185):
+            window.blit(play_again_button, (window_width/2 + 150, 100))
+
+        if(mx > window_width/2 - 348 and mx < window_width/2 - 348 + 200 and my > 100 and my < 185):
+            window.blit(exit_button, (window_width/2- 348, 100))
+            
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if(mx > window_width/2 + 150  and mx < window_width/2 + 350 and my > 100 and my < 185): # borders of the start button
+                    game_function()
+                if(mx > window_width/2 - 348 and mx < window_width/2 - 348 + 200 and my > 100 and my < 185):
+                    pygame.quit()
+
+
+        pygame.display.flip()
+
+
 
 
 
@@ -210,12 +280,13 @@ def game_function():
                 enemy.draw(window)
 
         if life <= 0:
-            window.fill((127, 174, 226))
+            '''window.fill((127, 174, 226))
             game_over_text = pygame.font.SysFont(None, 80).render("You lose !", True, (255, 255, 255))
             window.blit(game_over_text, (470, 150))
             mouse = pygame.mouse.get_pos()
             window.blit(game_over_text, (800 / 2 + 50, 1200 / 2))
-            #run=False
+            #run=False'''
+            End_menu()
 
 
         for event in pygame.event.get():
@@ -260,7 +331,9 @@ def game_function():
     pygame.quit()
     exit()
 
+#End_menu()
 start_menu()
+#End_menu()
 #game_function()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
