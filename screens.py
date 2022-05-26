@@ -188,7 +188,7 @@ def game_function():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
 
-                if y <= 600 and x > 180 and len(bullets) < 1:
+                if y <= 625 and x > 215 and len(bullets) < 1:
                     cannon_shot_sound.play()
 
                     b = Bullet(200, 620, 20, window)

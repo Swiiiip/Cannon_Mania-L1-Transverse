@@ -92,14 +92,17 @@ class Cannon(pygame.sprite.Sprite):
 
         mx, my = pygame.mouse.get_pos() #cursor coordinates
 
-        # To restrict certain cannon rotations later on
-        if my > 620:
-            my = 620
-        if mx < 200:
-            mx = 200
-
+        
         dx, dy = mx - self.cannon_rect.centerx, my - self.cannon_rect.centery #distance between the cursor and the cannon
         angle = math.degrees(math.atan2(-dy, dx)) #angle of the cannon
+        
+        # To restrict certain cannon rotations later on
+        if angle > 90 :
+            angle = 90
+        elif angle < 0 and angle > -90 :
+            angle = 0
+        elif angle <= -90 :
+            angle = -90 - angle
 
         self.cannon_image = pygame.transform.rotate(cannon_shoot, angle) #update image
         self.cannon_rect = self.cannon_image.get_rect(center = (self.x+35, self.y+10)) #update hitbox
