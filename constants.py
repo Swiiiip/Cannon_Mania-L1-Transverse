@@ -76,9 +76,6 @@ mouse_click_sound = pygame.mixer.Sound('audio/Mouse Click Sound Effect (No Copyr
 score_sound = pygame.mixer.Sound('audio/Score.mp3')
 
 
-#AUGH_sound = pygame.mixer.Sound('audio/AUGHHHH sound effect tiktok snoring meme.mp3')
-
-
 #   0 - image is looking to the right
 #  90 - image is looking up
 # 180 - image is looking to the left

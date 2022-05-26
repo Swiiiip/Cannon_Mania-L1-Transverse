@@ -212,7 +212,6 @@ def game_function():
                         bullets.remove(b)
 
             if (enemy in enemies) and (enemy.collide_with(cannon.cannon_rect) or enemy.collide_with(tower_rect)): #enemy hits tower or cannon
-                # AUGH_sound.play()
                 enemies.remove(enemy)
                 life -= 10
 
