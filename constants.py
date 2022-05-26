@@ -75,6 +75,7 @@ cannon_shot_sound = pygame.mixer.Sound('audio/Cannon Sound Effect.mp3')
 cannon_shot_sound.set_volume(0.1)
 mouse_click_sound = pygame.mixer.Sound('audio/Mouse Click Sound Effect (No Copyright).mp3')
 score_sound = pygame.mixer.Sound('audio/Score.mp3')
+lose_sound = pygame.mixer.Sound('audio/Lose.mp3')
 
 
 #   0 - image is looking to the right

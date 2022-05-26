@@ -1,4 +1,6 @@
 import random
+
+import constants
 from objects import *
 from constants import *
 
@@ -62,7 +64,11 @@ def start_menu():
 
 # Function for the screen after losing
 def End_menu():
+    lose_sound.play()
+    background_music_game.stop()
+    background_music_start.play()
     run = True
+
     while run:
 
         pygame.mouse.set_visible(True)  # Make the mouse invisible
@@ -118,7 +124,8 @@ def game_function():
     enemy_spawn_probability = ENEMY_SPAWN_PROBABILITY_PER_SECOND / FPS
 
     #Life bar
-    max_life = 100
+    max_life = 144
+    #It's the same as 100 but we remove 14,4 144/10 = 14,4
     life = max_life
 
     #Score text init
@@ -131,8 +138,11 @@ def game_function():
     cannonX, cannonY = 180,615
     cannon = Cannon( cannonX, cannonY ,window)
 
+
+
     run = True
     while run:
+
 
         pygame.mouse.set_visible(False)#Make the mouse invisible
 
@@ -145,8 +155,8 @@ def game_function():
 
         # display health
         window.blit(health_bar, (10, 55))
-        pygame.draw.rect(window, (100, 0, 0), (62, 77, max_life+44, 14))
-        pygame.draw.rect(window, (255, 0, 0), (62, 77, life+44, 14))
+        pygame.draw.rect(window, (100, 0, 0), (62, 77, max_life, 14))
+        pygame.draw.rect(window, (255, 0, 0), (62, 77, life, 14))
 
         # display score
         window.blit(display_score, (950, 55))
@@ -213,7 +223,7 @@ def game_function():
 
             if (enemy in enemies) and (enemy.collide_with(cannon.cannon_rect) or enemy.collide_with(tower_rect)): #enemy hits tower or cannon
                 enemies.remove(enemy)
-                life -= 10
+                life -= 14.4
 
                 if life <= 0:
                     run = False
