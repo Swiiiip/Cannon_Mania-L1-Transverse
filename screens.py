@@ -202,7 +202,7 @@ def game_function():
 
                         score = score + 1
                         if score % 10 == 0:
-                            score_sound.set_volume(0.2)
+                            score_sound.set_volume(0.1)
                             score_sound.play()
 
                         display_score = score_font.render("Score : " + str(score), True, (0, 0, 0))
