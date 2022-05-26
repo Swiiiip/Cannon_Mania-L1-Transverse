@@ -3,6 +3,7 @@ from pathlib import Path
 
 #initialize pygame
 pygame.init()
+pygame.display.set_caption('! Cannon Mania !')
 
 #initialize the window
 window_width = 1200
