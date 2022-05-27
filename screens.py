@@ -127,7 +127,6 @@ def start_menu():
 def end_menu():
     lose_message = score_font.render("You Lost!",True,(0,0,0))
     display_score = score_font.render("Score : " + str(SCORE), True, (0, 0, 0))
-    lose_sound.play()
     background_music_game.stop()
     background_music_start.play()
 

@@ -93,7 +93,6 @@ cannon_shot_sound.set_volume(0.4)
 
 mouse_click_sound = pygame.mixer.Sound('audio/Mouse Click Sound Effect (No Copyright).mp3')
 score_sound = pygame.mixer.Sound('audio/Score.mp3')
-lose_sound = pygame.mixer.Sound('audio/Lose.mp3')
 cannon_shot_sound.set_volume(0.6)
 
 explosion_sound = pygame.mixer.Sound('audio/Explosion.mp3')
