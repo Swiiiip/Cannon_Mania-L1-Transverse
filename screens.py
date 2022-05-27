@@ -7,6 +7,8 @@ from constants import *
 #initialize pygame mixer for the music
 pygame.mixer.init()
 
+
+
 # Function used in each menu in order to display the basic back_ground(Sky, grass and dirt)
 def display_background():
 
@@ -67,6 +69,7 @@ def End_menu():
     lose_sound.play()
     background_music_game.stop()
     background_music_start.play()
+    
     run = True
 
     while run:
@@ -122,6 +125,7 @@ def game_function():
     enemy_spawn_cooldown = False
     enemy_spawn_cooldown_counter = 0
     enemy_spawn_probability = ENEMY_SPAWN_PROBABILITY_PER_SECOND / FPS
+    
 
     #Life bar
     max_life = 144
@@ -138,10 +142,13 @@ def game_function():
     cannonX, cannonY = 180,615
     cannon = Cannon( cannonX, cannonY ,window)
 
+    time = 0
 
 
+  
     run = True
     while run:
+        time = 0
 
 
         pygame.mouse.set_visible(False)#Make the mouse invisible
@@ -190,8 +197,8 @@ def game_function():
 
                 if y <= 625 and x > 215 and len(bullets) < 1:
                     cannon_shot_sound.play()
-
-                    b = Bullet(200, 620, 20, window)
+                    time += 0.15
+                    b = Bullet(200, 620, 100, time, window)
                     bullets.append(b)
 
         # Move and display bullets and enemies :

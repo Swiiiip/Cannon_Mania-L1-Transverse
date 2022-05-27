@@ -1,7 +1,7 @@
 import math
 from constants import *
 
-GRAVITY = 0.3
+GRAVITY = 2.5
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, type, window):
@@ -36,9 +36,11 @@ class Enemy(pygame.sprite.Sprite):
         self.draw()
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, speed, window):
+    def __init__(self, x, y, speed, time, window):
         super().__init__()
 
+ 
+        self.time = time
         self.window = window
 
         mx, my = pygame.mouse.get_pos() #cursor coordinates
@@ -47,8 +49,8 @@ class Bullet(pygame.sprite.Sprite):
         angle = math.atan2(my-y, mx-x) #get angle to target in radians
         self.speed = speed
 
-        self.dx = math.cos(angle)*speed
-        self.dy = math.sin(angle)*speed
+        self.dx = math.cos(angle)*speed*time
+        self.dy = math.sin(angle)*speed*time
 
         self.rotation = 0 # bullet rotation
 
@@ -62,9 +64,8 @@ class Bullet(pygame.sprite.Sprite):
         if I change self.x and y and then convert to an integer for
         the rectangle.
         '''
+        self.dy += (1/2)*GRAVITY*self.time      
 
-        self.dy += GRAVITY
-        
         self.x = self.x + self.dx
         self.y = self.y + self.dy
 

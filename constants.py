@@ -1,6 +1,8 @@
 import pygame
 from pathlib import Path
 
+
+
 #initialize pygame
 pygame.init()
 pygame.display.set_caption('! Cannon Mania !')
@@ -11,6 +13,7 @@ window_height = 800
 window = pygame.display.set_mode((window_width, window_height))
 
 FPS = 60
+
 
 # Import images :
 
