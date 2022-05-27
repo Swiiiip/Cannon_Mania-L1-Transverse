@@ -279,8 +279,8 @@ def game_function():
 
                 if my <= 625 and mx > 215 and len(bullets) < 1:
                     cannon_shot_sound.play()
-                    time += 0.15
-                    b = Bullet(200, 620,100, time)
+                    time += 0.2
+                    b = Bullet(200, 620,90, time)
                     bullets.append(b)
 
         # Move and display objects :

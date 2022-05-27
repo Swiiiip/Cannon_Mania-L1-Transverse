@@ -3,7 +3,7 @@
 import math
 from constants import *
 
-GRAVITY = 2.5
+GRAVITY = 15
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, type):
@@ -70,7 +70,8 @@ class Bullet(pygame.sprite.Sprite):
         the rectangle.
         '''
 
-        self.dy += (1/2)*GRAVITY*self.time
+        self.dy += (1/2)*GRAVITY*pow(self.time, 2)
+        #-1/2g(x/v0cos(x))^2
         
         self.x = self.x + self.dx
         self.y = self.y + self.dy
