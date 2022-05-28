@@ -87,6 +87,10 @@ def start_menu():
     cannon1 = Cannon(310,615)
     cannon2 = Cannon(820,615)
 
+    cannon1.limitRotate = False
+
+    cannon2.limitRotate = False
+
     while run:
 
         #Displays :
@@ -194,7 +198,6 @@ def game_function():
     shoot_cooldown_counter = 0
 
 
-
     #Life bar
     max_life = 144 # It's the same as 100 but we remove 14,4 144/10 = 14,4
     life = max_life
@@ -215,7 +218,6 @@ def game_function():
     run = True
     while run:
         #life = 0 #instant death
-        time = 0
 
         pygame.mouse.set_visible(False)#Make the mouse invisible
 
@@ -249,10 +251,10 @@ def game_function():
                 elif 0.15 < random_generator <= 0.45: # 30% chance : boulders
                     enemy_type = 1
 
-                elif 0.45 < random_generator <= 0.8:  # 35% chance : 2
+                elif 0.45 < random_generator <= 0.8:  # 35% chance : car
                     enemy_type = 2
 
-                else:  # 20% chance : 3
+                else:  # 20% chance : moto
                     enemy_type = 3
 
                 enemies.append( Enemy(enemy_type) ) #stores enemy generated for later display
@@ -277,14 +279,12 @@ def game_function():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
 
-                if my <= 625 and mx > 215 and len(bullets) < 1:
+                if my <= 625 and mx > 215 and len(bullets) < 1: #stops player from shooting again before the ball hits an enemy first
                     cannon_shot_sound.play()
-                    time += 0.15
-                    b = Bullet(200, 620,100, time)
+                    b = Bullet(200, 620, 65)
                     bullets.append(b)
 
         # Move and display objects :
-
         for enemy in enemies:
             enemy.update()
 
@@ -321,7 +321,7 @@ def game_function():
                         display_score = score_font.render("Score : " + str(SCORE), True, (0, 0, 0))
                         enemy_spawn_probability = enemy_spawn_probability + 0.0004
 
-                    elif (b.x > window.get_width() or b.x < 0) or (b.y > window.get_height() - 158):  # bullet touches ground or sides of screen
+                    elif (0 > b.xt > window.get_width()) or (b.yt > window.get_height() - 158):  # bullet touches ground or sides of screen
                         bullets.remove(b)
 
             if (enemy in enemies) and (enemy.collide_with(cannon.cannon_rect) or enemy.collide_with(tower_rect)): #enemy hits tower or cannon

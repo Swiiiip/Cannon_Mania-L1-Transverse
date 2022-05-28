@@ -3,7 +3,7 @@
 import math
 from constants import *
 
-GRAVITY = 2.5
+GRAVITY = 3.5
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, type):
@@ -45,17 +45,15 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, speed, time):
+    def __init__(self, x, y, speed):
         super().__init__()
         mx, my = pygame.mouse.get_pos() #cursor coordinates
         self.x, self.y = x, y # bullet inital position
-        self.time = time
 
-        angle = math.atan2(my-y, mx-x) #get angle to target in radians
-        self.speed = speed
+        self.time = 0 #time tracker used later on for the trajectory formula
 
-        self.dx = math.cos(angle)*speed*time
-        self.dy = math.sin(angle)*speed*time
+        self.angle = math.atan2(my-y, mx-x) #get angle to target in radians
+        self.speed = speed #initial speed
 
         self.rotation = 0 # bullet rotation
 
@@ -70,15 +68,16 @@ class Bullet(pygame.sprite.Sprite):
         the rectangle.
         '''
 
-        self.dy += (1/2)*GRAVITY*self.time
-        
-        self.x = self.x + self.dx
-        self.y = self.y + self.dy
+        self.time += FPS/166
 
-        self.rotation = ( self.rotation - self.y / (self.speed) ) % 360
+        # x(t) and y(t) positions depending on time t
+        self.xt = math.cos(self.angle)*self.speed*self.time + self.x
+        self.yt = (1/2)*GRAVITY*self.time**2 + math.sin(self.angle)*self.speed*self.time + self.y #parabola formula
+
+        self.rotation = ( self.rotation - self.yt / (self.speed) ) % 360 #calculate rotation of ball
 
         self.bullet_image = pygame.transform.rotate(cannon_ball, self.rotation ) #update image for bullet rotation
-        self.bullet_rect = self.bullet_image.get_rect(center = ( int(self.x), int(self.y) )) # update hitbox
+        self.bullet_rect = self.bullet_image.get_rect(center = ( int(self.xt), int(self.yt) )) # update hitbox
 
     def draw(self):
         window.blit(self.bullet_image,self.bullet_rect)
@@ -92,6 +91,8 @@ class Cannon(pygame.sprite.Sprite):
     def __init__(self, x, y):
         self.x, self.y = x, y #cannon stand coordinates
 
+        self.limitRotate = True
+
         self.cannon_image = cannon_shoot # image
         self.cannon_rect = self.cannon_image.get_rect(center = (self.x+35, self.y+10)) # hitbox
 
@@ -100,18 +101,19 @@ class Cannon(pygame.sprite.Sprite):
         mx, my = pygame.mouse.get_pos() #cursor coordinates
 
         dx, dy = mx - self.cannon_rect.centerx, my - self.cannon_rect.centery #distance between the cursor and the cannon
-        angle = math.degrees(math.atan2(-dy, dx)) #angle of the cannon
+        self.angle = math.degrees(math.atan2(-dy, dx)) #angle of the cannon
 
-        self.cannon_image = pygame.transform.rotate(cannon_shoot, angle) #update image
+        if self.limitRotate :
+            # To restrict certain cannon rotations later on
+            if self.angle > 90 :
+                self.angle = 90
+            elif self.angle < 0 and self.angle > -90 :
+                self.angle = 0
+            elif self.angle <= -90 :
+                self.angle = -90 - self.angle
+
+        self.cannon_image = pygame.transform.rotate(cannon_shoot, self.angle) #update image
         self.cannon_rect = self.cannon_image.get_rect(center = (self.x+35, self.y+10)) #update hitbox
-
-        # To restrict certain cannon rotations later on
-        if angle > 90 :
-            angle = 90
-        elif angle < 0 and angle > -90 :
-            angle = 0
-        elif angle <= -90 :
-            angle = -90 - angle
 
     def draw(self):
         window.blit(self.cannon_image, self.cannon_rect )

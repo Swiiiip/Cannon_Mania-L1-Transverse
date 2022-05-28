@@ -39,8 +39,8 @@ start_button_before_hover = pygame.transform.smoothscale(pygame.image.load("text
 exit_button = pygame.transform.smoothscale(pygame.image.load("textures/Exit_button.png").convert_alpha(), (180, 70) )
 exit_button_before_hover = pygame.transform.smoothscale(pygame.image.load("textures/Exit_button_before_hover.png").convert_alpha(), (180, 70) )
 
-play_again_button = pygame.transform.smoothscale(pygame.image.load("textures/play_again_button.png").convert_alpha(), (200, 85) )
-play_again_button_before_hover =  pygame.transform.smoothscale(pygame.image.load("textures/play_again_button_before_hover.png").convert_alpha(), (200, 85) )
+play_again_button = pygame.transform.smoothscale(pygame.image.load("textures/play_again_button.png").convert_alpha(), (200, 75) )
+play_again_button_before_hover =  pygame.transform.smoothscale(pygame.image.load("textures/play_again_button_before_hover.png").convert_alpha(), (200, 75) )
 
 resume_button = pygame.transform.smoothscale(pygame.image.load("textures/resume_button.png").convert_alpha(), (186, 68) )
 resume_button_before_hover = pygame.transform.smoothscale(pygame.image.load("textures/resume_button_before_hover.png").convert_alpha(), (186, 68) )
@@ -65,9 +65,9 @@ missile = pygame.transform.smoothscale(pygame.image.load("textures/missile.png")
 #ground_enemy1 = pygame.transform.smoothscale(pygame.image.load("textures/ground_enemy1.png").convert_alpha(), (150, 200))
 boulder = pygame.transform.smoothscale(pygame.image.load("textures/boulder.png").convert_alpha(), (220, 220))
 #ground_enemy2 = pygame.transform.smoothscale(pygame.image.load("textures/ground_enemy2.png").convert_alpha(), (100, 100))
-car = pygame.transform.smoothscale(pygame.image.load("textures/car.png").convert_alpha(), (200, 120))
+car = pygame.transform.smoothscale(pygame.image.load("textures/car.png").convert_alpha(), (280, 120))
 #ground_enemy3 = pygame.transform.smoothscale(pygame.image.load("textures/ground_enemy3.png").convert_alpha(), (100, 125))
-moto = pygame.transform.smoothscale(pygame.image.load("textures/moto.png").convert_alpha(), (150, 120))
+moto = pygame.transform.smoothscale(pygame.image.load("textures/moto.png").convert_alpha(), (140, 120))
 
 
 enemyList = {0:(missile, 4, 2) , 1:(boulder, 2, 2) , 2:(car, 4, 1.5) , 3:(moto, 5, 1)} # enemyList[i] = (image, speed, damage)
